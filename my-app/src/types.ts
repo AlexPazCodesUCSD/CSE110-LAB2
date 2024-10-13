@@ -6,6 +6,7 @@ export enum Label {
 }
 
 export type Note = {
+  favorite: boolean;
   id: number;
   title: string;
   content: string;
