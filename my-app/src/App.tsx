@@ -35,8 +35,6 @@ function ListOfFavorites({favoriteList}:any) {
 
 
 function App() {
-
-  
   const [notes, setNotes] = useState(dummyNotesList);
   const [favoriteList, setFavoriteList] = useState<Note[]>([]);
   const [currentTheme, setCurrentTheme] = useState(themes.light);
@@ -138,7 +136,6 @@ function App() {
   useEffect(() => {
     console.log(notes);
   }, [notes]);
-  
   
   
  return (
