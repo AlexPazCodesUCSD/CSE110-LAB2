@@ -32,7 +32,11 @@ function ListOfFavorites({favoriteList}:any) {
   );
 }
 
+
+
 function App() {
+
+  
   const [notes, setNotes] = useState(dummyNotesList);
   const [favoriteList, setFavoriteList] = useState<Note[]>([]);
   const [currentTheme, setCurrentTheme] = useState(themes.light);
@@ -45,6 +49,7 @@ function App() {
     label: Label.other,
   };
  const [createNote, setCreateNote] = useState(initialNote);
+ const [selectedNote, setSelectedNote] = useState<Note>(initialNote);
 
  const deleteNote = (noteId:number) => {
   setNotes(notes.filter(note => note.id !== noteId))
@@ -58,6 +63,45 @@ function App() {
     setNotes([createNote, ...notes]);
     setCreateNote({...createNote, id:-1});
   };
+
+  const editTitleSelectedNote = (title: string, noteId:number) => {
+    const edittedSelectedNote = notes.map(note => {
+      if (note.id === noteId){
+        console.log("found the note with the id to edit",note.id);
+        return {...note, title: title};
+      }
+      return note;
+    });
+
+    setNotes(edittedSelectedNote)
+    //try to get whole list edited and send as setNotes(updatedNoteList)!!!
+  }
+
+  const editContentSelectedNote = (content: string, noteId:number) => {
+    const edittedSelectedNote = notes.map(note => {
+      if (note.id === noteId){
+        console.log("found the note with the id to edit",note.id);
+        return {...note, content: content};
+      }
+      return note;
+    });
+
+    setNotes(edittedSelectedNote)
+    //try to get whole list edited and send as setNotes(updatedNoteList)!!!
+  }
+
+  const editLabelSelectedNote = (label: string, noteId:number) => {
+    const edittedSelectedNote = notes.map(note => {
+      if (note.id === noteId){
+        console.log("found the note with the id to edit",note.id);
+        return {...note, Label: label};
+      }
+      return note;
+    });
+
+    setNotes(edittedSelectedNote)
+    //try to get whole list edited and send as setNotes(updatedNoteList)!!!
+  }
  
   const favoriteClicked = (noteId:number) => {
     const updatedNoteList = notes.map(note => {
@@ -85,6 +129,8 @@ function App() {
     }
   };
 
+  
+
   useEffect(() => {
     setFavoriteList(notes.filter((note) => note.favorite));
   }, [notes]);
@@ -92,6 +138,7 @@ function App() {
   useEffect(() => {
     console.log(notes);
   }, [notes]);
+  
   
   
  return (
@@ -139,9 +186,9 @@ function App() {
               <button onClick={() => deleteNote(note.id)} style = {{background: currentTheme.background,
        color: currentTheme.foreground,}}>x</button>
             </div>
-            <h2> {note.title} </h2>
-            <p> {note.content} </p>
-            <p> {note.label} </p>
+            <h2 contentEditable suppressContentEditableWarning = {true} onBlur={(event) => editTitleSelectedNote(event.target.innerHTML, note.id)}> {note.title} </h2>
+            <p contentEditable onBlur={(event) => editContentSelectedNote(event.target.innerHTML, note.id)}> {note.content} </p>
+            <p contentEditable onBlur={(event) => editLabelSelectedNote(event.target.innerHTML, note.id)}> {note.label} </p>
           </div>
         ))}
       </div>
@@ -150,7 +197,9 @@ function App() {
        color: currentTheme.foreground,}} onClick={toggleTheme}> Toggle Theme </button>
 
       <ListOfFavorites favoriteList={favoriteList}/>
+      
     </div>
+    
  );
 }
 
